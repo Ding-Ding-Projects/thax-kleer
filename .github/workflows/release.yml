@@ -50,6 +50,7 @@ jobs:
 
   build:
     needs: project-list
+    if: ${{ github.event_name != 'schedule' }}
     strategy:
       fail-fast: false
       matrix:
@@ -161,7 +162,7 @@ jobs:
 
   publish-release:
     needs: [project-list, build]
-    if: ${{ success() }}
+    if: ${{ success() && github.event_name != 'schedule' }}
     strategy:
       fail-fast: false
       max-parallel: 1
