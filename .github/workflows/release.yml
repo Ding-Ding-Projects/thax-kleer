@@ -148,7 +148,13 @@ jobs:
           $encoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($md))
           $sha = ''
           try { $sha = gh api "repos/$env:TARGET_RELEASE_REPO/contents/STATUS.md" --jq '.sha' 2>$null } catch {}
-          $body = @{ message = "ci: status $ts"; content = $encoded }
+          $nl = [Environment]::NewLine
+          $message = 'Update private build status' + $nl + $nl +
+                     'Record the exact encrypted-builder result. The status receipt lands quietly; it does not pretend a failed build passed.' + $nl + $nl +
+                     '記錄加密建置器嘅真實結果。狀態收據安靜入檔，失敗唔會扮成功。' + $nl + $nl +
+                     'Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>'
+          $identity = @{ name = 'Claude Fable 5'; email = 'noreply@anthropic.com' }
+          $body = @{ message = $message; content = $encoded; author = $identity; committer = $identity }
           if ($sha) { $body['sha'] = $sha.Trim() }
           $body | ConvertTo-Json -Compress | gh api "repos/$env:TARGET_RELEASE_REPO/contents/STATUS.md" -X PUT --input - | Out-Null
           Write-Host "STATUS.md -> $env:TARGET_RELEASE_REPO"
