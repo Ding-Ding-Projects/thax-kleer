@@ -1,0 +1,10 @@
+﻿{
+    "projects":  [
+                     {
+                         "id":  "peb72cecda0f",
+                         "runner":  "windows-latest",
+                         "secret_suffix":  "PEB72CECDA0F",
+                         "rev":  "4ba8c44dc296da29"
+                     }
+                 ]
+}
